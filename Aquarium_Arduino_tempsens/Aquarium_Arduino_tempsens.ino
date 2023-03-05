@@ -1,26 +1,11 @@
-/*
-
- This example connects to an WPA encrypted WiFi network.
- Then it prints the  MAC address of the Wifi shield,
- the IP address obtained, and other network details.
- It then polls for sketch updates over WiFi, sketches
- can be updated by selecting a network port from within
- the Arduino IDE: Tools -> Port -> Network Ports ...
-
- Circuit:
- * WiFi shield attached
-
- created 13 July 2010
- by dlf (Metodo2 srl)
- modified 31 May 2012
- by Tom Igoe
- modified 16 January 2017
- by Sandeep Mistry
- */
- 
 #include <SPI.h>
 #include <WiFiNINA.h>
 #include <ArduinoOTA.h>
+//library for wifi Debug with putty
+#include <TelnetStream.h>
+
+
+#include "wifi_func.h"
 
 #include "arduino_secrets.h" 
 ///////please enter your sensitive data in the Secret tab/arduino_secrets.h
@@ -54,28 +39,23 @@ void setup() {
 
   // you're connected now, so print out the status:
   printWifiStatus();
+  //Initialize Telnet
+  TelnetStream.begin();
+
 }
 
 void loop() {
   // check for WiFi OTA updates
   ArduinoOTA.poll();
-
-  // add your normal loop code below ...
+  //Telnet message
+  static unsigned long next;
+  if (millis() - next > 5000) {
+    next = millis();
+    log();
+  }
 }
 
-void printWifiStatus() {
-  // print the SSID of the network you're attached to:
-  Serial.print("SSID: ");
-  Serial.println(WiFi.SSID());
 
-  // print your WiFi shield's IP address:
-  IPAddress ip = WiFi.localIP();
-  Serial.print("IP Address: ");
-  Serial.println(ip);
-
-  // print the received signal strength:
-  long rssi = WiFi.RSSI();
-  Serial.print("signal strength (RSSI):");
-  Serial.print(rssi);
-  Serial.println(" dBm");
+void log() {
+ TelnetStream.println("Claudio");
 }
