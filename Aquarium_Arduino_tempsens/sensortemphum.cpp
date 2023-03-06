@@ -26,6 +26,7 @@ float retrievehum(){
 
 float aquariumtemp(){
     sensors.begin();
+    sensors.requestTemperatures(); 
     return sensors.getTempCByIndex(0);
 
 }
