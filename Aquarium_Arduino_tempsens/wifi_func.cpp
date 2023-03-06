@@ -61,12 +61,12 @@ void thingsb_aquarium_send(float external_temp,float external_hum,float internal
   if ( !tb.connected() ) {
     reconnect();
   }
-  TelnetStream.println("Sending to ThingsBoard node ...");
+  TelnetStream.print("Sending to ThingsBoard node ...");
   
   tb.sendTelemetryFloat("ext_temp", external_temp);
   tb.sendTelemetryFloat("ext_hum", external_hum);
   tb.sendTelemetryFloat("temp_aquarium", internal_temp);
-
+  TelnetStream.println( "[DONE]" );
 
 
 }
@@ -76,7 +76,7 @@ void thingsb_aquarium_send(float external_temp,float external_hum,float internal
 void reconnect(){
   // Attempt to connect (clientId, username, password)
   while ( !tb.connected() ) {
-      TelnetStream.println("Connecting to ThingsBoard node ...");
+      TelnetStream.print("Connecting to ThingsBoard node ...");
   
     if (tb.connect(THINGSBOARD_SERVER, TOKEN, THINGSBOARD_PORT)) {
       TelnetStream.println( "[DONE]" );

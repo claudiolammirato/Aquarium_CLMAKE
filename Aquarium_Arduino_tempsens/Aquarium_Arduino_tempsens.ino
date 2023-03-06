@@ -30,7 +30,7 @@ void loop() {
   ArduinoOTA.poll();
   //Telnet message
   static unsigned long next;
-  if (millis() - next > 10000) {
+  if (millis() - next > 600000) {
     next = millis();
     external_temp = retrievetemp();
     external_hum = retrievehum();
