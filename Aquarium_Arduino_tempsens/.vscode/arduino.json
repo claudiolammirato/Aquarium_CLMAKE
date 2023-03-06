@@ -1,0 +1,6 @@
+{
+    "board": "arduino:samd:nano_33_iot",
+    "programmer": "arduino:atmel_ice",
+    "port": "192.168.1.112",
+    "sketch": "Aquarium_Arduino_tempsens.ino"
+}

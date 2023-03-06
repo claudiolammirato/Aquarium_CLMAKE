@@ -1,54 +1,31 @@
 #include <SPI.h>
 #include <WiFiNINA.h>
+#include <WiFiClient.h>
 #include <ArduinoOTA.h>
+
 
 //library for wifi Debug with putty
 #include "wifi_func.h"
 
 //library for DHT Sensor
-#include "dhtsensor.h"
-
-#include "arduino_secrets.h" 
-///////please enter your sensitive data in the Secret tab/arduino_secrets.h
-/////// Wifi Settings ///////
-char ssid[] = SECRET_SSID;      // your network SSID (name)
-char pass[] = SECRET_PASS;   // your network password
-
-int status = WL_IDLE_STATUS;
+#include "sensortemphum.h"
 
 //DHT Variables
 float external_temp;
 float external_hum;
+float internal_temp;
 
 void setup() {
+  
   //Initialize serial:
-  Serial.begin(9600);
-
-  // check for the presence of the shield:
-  if (WiFi.status() == WL_NO_SHIELD) {
-    Serial.println("WiFi shield not present");
-    // don't continue:
-    while (true);
-  }
-
-  // attempt to connect to Wifi network:
-  while ( status != WL_CONNECTED) {
-    Serial.print("Attempting to connect to SSID: ");
-    Serial.println(ssid);
-    // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
-    status = WiFi.begin(ssid, pass);
-  }
-
-  // start the WiFi OTA library with internal (flash) based storage
-  ArduinoOTA.begin(WiFi.localIP(), "Arduino", "password", InternalStorage);
-
-  // you're connected now, so print out the status:
-  //Initialize Telnet
   TelnetStream.begin();
 
+  // start the WiFi OTA library with internal (flash) based storage
+  ArduinoOTA.begin(WiFi.localIP(), "Arduino", "claudio", InternalStorage);
 }
 
 void loop() {
+    
   // check for WiFi OTA updates
   ArduinoOTA.poll();
   //Telnet message
@@ -57,6 +34,12 @@ void loop() {
     next = millis();
     external_temp = retrievetemp();
     external_hum = retrievehum();
-    printprova(external_temp, external_hum);
+    internal_temp = aquariumtemp();
+
+    //print Wifi Status
+    printwifistatus();
+    //Print external temp and Hum
+    printext(external_temp, external_hum,internal_temp);
+    thingsb_aquarium_send(external_temp,external_hum,internal_temp);
   }
 }
