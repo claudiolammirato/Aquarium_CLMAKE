@@ -1,11 +1,12 @@
 #include <SPI.h>
 #include <WiFiNINA.h>
 #include <ArduinoOTA.h>
+
 //library for wifi Debug with putty
-#include <TelnetStream.h>
-
-
 #include "wifi_func.h"
+
+//library for DHT Sensor
+#include "dhtsensor.h"
 
 #include "arduino_secrets.h" 
 ///////please enter your sensitive data in the Secret tab/arduino_secrets.h
@@ -14,6 +15,10 @@ char ssid[] = SECRET_SSID;      // your network SSID (name)
 char pass[] = SECRET_PASS;   // your network password
 
 int status = WL_IDLE_STATUS;
+
+//DHT Variables
+float external_temp;
+float external_hum;
 
 void setup() {
   //Initialize serial:
@@ -38,7 +43,6 @@ void setup() {
   ArduinoOTA.begin(WiFi.localIP(), "Arduino", "password", InternalStorage);
 
   // you're connected now, so print out the status:
-  printWifiStatus();
   //Initialize Telnet
   TelnetStream.begin();
 
@@ -49,13 +53,10 @@ void loop() {
   ArduinoOTA.poll();
   //Telnet message
   static unsigned long next;
-  if (millis() - next > 5000) {
+  if (millis() - next > 10000) {
     next = millis();
-    log();
+    external_temp = retrievetemp();
+    external_hum = retrievehum();
+    printprova(external_temp, external_hum);
   }
-}
-
-
-void log() {
- TelnetStream.println("Claudio");
 }

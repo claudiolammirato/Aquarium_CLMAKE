@@ -2,9 +2,10 @@
 #define WIFI_FUNC_H
 
 #include <Arduino.h>
-#include <WiFiNINA.h>
+#include <TelnetStream.h>
 
 
-void printWifiStatus();
+
+void printprova(float temp, float hum);
 
 #endif

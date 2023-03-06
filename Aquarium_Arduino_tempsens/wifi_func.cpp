@@ -1,18 +1,11 @@
 #include "wifi_func.h"
 
-void printWifiStatus() {
-  // print the SSID of the network you're attached to:
-  Serial.print("SSID: ");
-  Serial.println(WiFi.SSID());
+void printprova(float temperature,float humidity) {
+  TelnetStream.print("La temperatura è: ");
+  TelnetStream.print(temperature);
+  TelnetStream.println("°C");
+  TelnetStream.print("L'umidità è: ");
+  TelnetStream.print(humidity);
+  TelnetStream.println("%");
 
-  // print your WiFi shield's IP address:
-  IPAddress ip = WiFi.localIP();
-  Serial.print("IP Address: ");
-  Serial.println(ip);
-
-  // print the received signal strength:
-  long rssi = WiFi.RSSI();
-  Serial.print("signal strength (RSSI):");
-  Serial.print(rssi);
-  Serial.println(" dBm");
 }
