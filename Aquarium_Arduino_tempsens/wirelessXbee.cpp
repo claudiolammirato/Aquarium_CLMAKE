@@ -90,6 +90,9 @@ void writeXbee(std::string str, std::string& msg_out, std::string addresslow){
 
     msg_out[4] = result[0]; // Change with right length
     msg_out[5] = result[1]; // Change with right length
+    
+
+
 }
 
 
