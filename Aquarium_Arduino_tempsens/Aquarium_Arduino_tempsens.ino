@@ -38,7 +38,7 @@ std::string addresslow = "407C6019";
 
 //OPTIONS
 //Send time
-const int send_time = 30*60*1000;
+const int send_time = 10*1000;
 
 
 
@@ -81,7 +81,7 @@ void loop() {
     printext(external_temp, external_hum,internal_temp);
     thingsb_aquarium_send(external_temp,external_hum,internal_temp);
 
-    std::string msg_string="Claudio_" + std::to_string(external_temp);
+    std::string msg_string= std::to_string(external_temp)+ "_claudio";
     std::string msg_hex;
     std::string msg_out;
 
@@ -89,12 +89,10 @@ void loop() {
     stream2hex(msg_string, msg_hex, true);
     //send to Xbee
     writeXbee(msg_hex,msg_out, addresslow, mySerial);
-
-    }
+  }
 
 
   //read xbee message
-    readXbee(mySerial);
-
-    delay(100);
+  readXbee(mySerial);
+  delay(150);
 }
