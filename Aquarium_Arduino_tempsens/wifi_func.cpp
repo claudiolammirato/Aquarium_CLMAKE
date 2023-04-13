@@ -12,6 +12,10 @@ WiFiClient wifiClient;
 ThingsBoard tb(wifiClient);
 
 
+
+
+
+
 void printext(float temperature,float humidity, float internal_temp) {
   TelnetStream.print("La temperatura è: ");
   TelnetStream.print(temperature);
@@ -74,6 +78,7 @@ void thingsb_aquarium_send(float external_temp,float external_hum,float internal
 
 
 void reconnect(){
+
   // Attempt to connect (clientId, username, password)
   while ( !tb.connected() ) {
       TelnetStream.print("Connecting to ThingsBoard node ...");
@@ -99,3 +104,42 @@ void resetcustom(){
   Serial.println("resetting");
   NVIC_SystemReset(); 
 }
+
+
+void webserver_aquarium(WiFiServer server){
+  Serial.println("server");
+  wifiClient = server.available();
+
+  if (wifiClient) {
+    Serial.println("Nuovo client");
+
+    boolean currentLineIsBlank = true;
+    while (wifiClient.connected()) {
+      if (wifiClient.available()) {
+        char c = wifiClient.read();
+        Serial.write(c);
+    
+
+        if (c == '\n' && currentLineIsBlank) {
+  
+          wifiClient.println("HTTP/1.1 200 OK");
+          wifiClient.println("Content-Type: text/html");
+          wifiClient.println("Connection: close");
+          wifiClient.println("Refresh: 5");
+          wifiClient.println();
+          wifiClient.println("<!DOCTYPE HTML>");
+          wifiClient.println("<html>");
+    
+          //client.print("<h1>" + msg + "</h1>");
+          wifiClient.print("<h1>Claudio</h1>");
+          
+          wifiClient.println("</html>");
+          break;
+        }
+      }
+    }
+  }
+  //wifiClient.stop();
+  Serial.println("Client disconnesso");
+}
+
