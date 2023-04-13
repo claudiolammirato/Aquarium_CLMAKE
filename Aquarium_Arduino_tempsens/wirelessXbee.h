@@ -7,11 +7,14 @@
 #include <stdio.h>
 #include <sstream>
 #include <typeinfo>
+#include <Arduino.h>
 
 
-void writeXbee(std::string str, std::string& , std::string addresslow);
+
+void writeXbee(std::string str, std::string& , std::string addresslow, Uart& mySerial);
 void stream2hex(std::string str, std::string& hexstr, bool capital = false);
 void hex2stream(std::string hexstr, std::string& str);
+void SERCOM0_Handler();
 
 std::string dec2hex(long a);
 long hex2dec(const std::string & hexstr);

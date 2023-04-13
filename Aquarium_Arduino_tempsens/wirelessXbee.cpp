@@ -1,6 +1,13 @@
 #include "wirelessXbee.h"
 
-void writeXbee(std::string str, std::string& msg_out, std::string addresslow){
+
+
+
+
+void writeXbee(std::string str, std::string& msg_out, std::string addresslow, Uart& mySerial){
+
+
+    
     //std::cout << str<<'\n';
     //std::cout << str.length()<< '\n';
     //hexstr = str + "_OUT";
@@ -90,6 +97,20 @@ void writeXbee(std::string str, std::string& msg_out, std::string addresslow){
 
     msg_out[4] = result[0]; // Change with right length
     msg_out[5] = result[1]; // Change with right length
+
+
+    unsigned char hexNumber[msg_out.length()/2];
+    unsigned short temp;
+  
+    for (int i=0;i<msg_out.length();i+=2){
+      std::stringstream my_ss;
+      my_ss << msg_out.substr(i, 2).c_str();
+      my_ss >> std::hex >> temp;
+      hexNumber[i/2] = temp;
+      
+           
+    }
+    mySerial.write(hexNumber, sizeof(hexNumber));
     
 
 
