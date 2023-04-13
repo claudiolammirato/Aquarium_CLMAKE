@@ -110,10 +110,33 @@ void writeXbee(std::string str, std::string& msg_out, std::string addresslow, Ua
       
            
     }
-    mySerial.write(hexNumber, sizeof(hexNumber));
-    
+    //send message to the other xbee
+    mySerial.write(hexNumber, sizeof(hexNumber));  
 
+}
 
+void readXbee(Uart& mySerial){
+    String data ("");
+    String data_clear ("");
+    char incomingByte={};
+    int counter = 0;
+    while(mySerial.available()){
+      incomingByte = mySerial.read();
+        //for (int i=0; i<sizeof(incomingByte); i++){
+        //Serial.print(incomingByte);
+        //data[j] = incomingByte;
+        //j++;
+      data += incomingByte;
+      counter++;
+
+      }
+    if(data.length()!=0){
+      for(int i=15; i<data.length()-1; i++){
+        data_clear += data[i];
+        
+      }
+      Serial.println(data_clear);
+    }
 }
 
 

@@ -5,6 +5,7 @@
 #include "wiring_private.h"
 #include <iostream>
 #include <string>
+#include "wirelessXbee.h"
 
 
 //Arduino IOT 33 mySerial Initialization
@@ -15,7 +16,7 @@ Uart mySerial (&sercom0, 5, 6, SERCOM_RX_PAD_1, UART_TX_PAD_0);
 void SERCOM0_Handler(){
     mySerial.IrqHandler();
 }
-#include "wirelessXbee.h"
+
 
 
 
@@ -34,6 +35,10 @@ float internal_temp;
 
 //Adrress Low of Xbee tfor communication
 std::string addresslow = "407C6019";
+
+//OPTIONS
+//Send time
+const int send_time = 30*60*1000;
 
 
 
@@ -63,7 +68,7 @@ void loop() {
   ArduinoOTA.poll();
   //Telnet message
   static unsigned long next;
-  if (millis() - next > 10000) {
+  if (millis() - next > send_time) {
     next = millis();
     external_temp = retrievetemp();
     external_hum = retrievehum();
@@ -82,19 +87,14 @@ void loop() {
 
     //Convert to HEX
     stream2hex(msg_string, msg_hex, true);
+    //send to Xbee
     writeXbee(msg_hex,msg_out, addresslow, mySerial);
-    //byte ans[50];
-    
+
+    }
 
 
-    //Serial.println(msg_out.substr(0, 2).c_str());
-    //Serial.println(msg_out.c_str());
-    
-    Serial.println("loop");
+  //read xbee message
+    readXbee(mySerial);
 
-    //mySerial.write(hexNumber, sizeof(hexNumber));
-    //byte xxx[] = {0x7E, 0x00, 0X15, 0x10, 0x01, 0x00, 0x13, 0xA2, 0x00, 0x40, 0x7C, 0x60, 0x19, 0xFF, 0xFE, 0x00, 0x00, 0x43, 0x6C, 0x61, 0x75, 0x64, 0x69, 0x6F, 0x46};
-    //mySerial.write(ans, sizeof(ans));
-    
-  }
+    delay(100);
 }

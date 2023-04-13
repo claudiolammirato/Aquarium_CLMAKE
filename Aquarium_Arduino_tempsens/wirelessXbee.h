@@ -14,7 +14,7 @@
 void writeXbee(std::string str, std::string& , std::string addresslow, Uart& mySerial);
 void stream2hex(std::string str, std::string& hexstr, bool capital = false);
 void hex2stream(std::string hexstr, std::string& str);
-void SERCOM0_Handler();
+void readXbee(Uart& mySerial);
 
 std::string dec2hex(long a);
 long hex2dec(const std::string & hexstr);
