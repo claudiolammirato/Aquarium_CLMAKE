@@ -9,7 +9,8 @@ char ssid[] = SECRET_SSID;      // your network SSID (name)
 char pass[] = SECRET_PASS;   // your network password
 
 WiFiClient wifiClient;
-ThingsBoard tb(wifiClient);
+WiFiClient wifiClient_tb;
+ThingsBoard tb(wifiClient_tb);
 
 
 
@@ -106,18 +107,18 @@ void resetcustom(){
 }
 
 
-void webserver_aquarium(WiFiServer server){
-  Serial.println("server");
+void webserver_aquarium(WiFiServer server, float external_temp){
+  //Serial.println("server");
   wifiClient = server.available();
 
   if (wifiClient) {
-    Serial.println("Nuovo client");
+    //Serial.println("Nuovo client");
 
     boolean currentLineIsBlank = true;
     while (wifiClient.connected()) {
       if (wifiClient.available()) {
         char c = wifiClient.read();
-        Serial.write(c);
+        Serial.print(c);
     
 
         if (c == '\n' && currentLineIsBlank) {
@@ -131,7 +132,23 @@ void webserver_aquarium(WiFiServer server){
           wifiClient.println("<html>");
     
           //client.print("<h1>" + msg + "</h1>");
-          wifiClient.print("<h1>Claudio</h1>");
+          wifiClient.println("<h1>Claudio</h1>");
+          wifiClient.print("<h1>");
+          wifiClient.print(external_temp);
+          wifiClient.println("<h1>");
+            
+            
+          wifiClient.println("<h1>Display a Submit Button</h1>");
+
+          wifiClient.println("<form method='get' action='/'>");
+          wifiClient.println("<label for='fname'>First name: </label>");
+          wifiClient.println("<input type='text' id='fname' name='fname'><br><br>");
+
+            
+          wifiClient.println("<input type='submit' value='Submit'>");
+          wifiClient.println("</form>");
+
+         
           
           wifiClient.println("</html>");
           break;
@@ -139,7 +156,7 @@ void webserver_aquarium(WiFiServer server){
       }
     }
   }
-  //wifiClient.stop();
-  Serial.println("Client disconnesso");
+  wifiClient.stop();
+  //Serial.println("Client disconnesso");
 }
 

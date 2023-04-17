@@ -11,7 +11,7 @@ void printwifistatus();
 void thingsb_aquarium_send(float external_temp,float external_hum,float internal_temp);
 void reconnect();
 void resetcustom();
-void webserver_aquarium(WiFiServer server);
+void webserver_aquarium(WiFiServer server, float external_temp);
 
 
 #endif

@@ -113,7 +113,7 @@ void loop() {
     delay(50);
 
     //webserver
-    webserver_aquarium(server);
+    webserver_aquarium(server, external_temp);
     
 
   }
